@@ -1,0 +1,124 @@
+@startuml ""
+class Medico {
+  - String nombre
+  - String direccion
+  - String telefono
+  - String poblacion
+  - String provincia
+  - String codigoPostal
+  - String nif
+  - String numeroSeguridadSocial
+  - String numeroColegiado
+  - String categoriaLaboral
+  - List<String> horarioConsulta
+  - Date fechaAlta
+  - Date fechaBaja
+  - List<Vacaciones> vacaciones
+  - List<Cita> citas
+  - List<Paciente> pacientes
+}
+
+class Empleado {
+  - String nombre
+  - String direccion
+  - String telefono
+  - String poblacion
+  - String provincia
+  - String codigoPostal
+  - String nif
+  - String numeroSeguridadSocial
+  - String tipo
+  - List<Vacaciones> vacaciones
+}
+
+class Paciente {
+  - String nombre
+  - String direccion
+  - String telefono
+  - String codigoPostal
+  - String nif
+  - String numeroSeguridadSocial
+  - Medico medicoAsignado
+  - List<Cita> citas
+}
+
+class Cita {
+  - Date fecha
+  - String consultorio
+  - String institucionPrestadoraSalud
+  - String entidadPromotoraSalud
+  - Medico medico
+  - Paciente paciente
+  - Diagnostico diagnostico
+}
+
+class Diagnostico {
+  - String nombre
+  - String descripcion
+  - Receta receta
+  - List<Sintoma> sintomas
+}
+
+
+
+class Sintoma {
+  - String descripcion
+}
+
+class Receta {
+  - Date fechaInicio
+  - Date fechaFin
+}
+
+class RecetaMedicamento {
+  - Receta receta
+  - Medicamento medicamento
+}
+
+class Medicamento {
+  - String nombreComercial
+  - String nombreGenerico
+  - String principioActivo
+  - String laboratorio
+  - boolean esGenerico
+  - String dosisAdultos
+  - String dosisNinos
+  - boolean requiereReceta
+  - boolean cubiertoPOS
+  - int unidadesDisponibles
+  - PrincipioActivo principioActivo
+}
+
+class MedicamentoContraindicacion {
+  - Medicamento medicamento
+  - Contraindicacion contraindicacion
+}
+
+class PrincipioActivo {
+  - String nombre
+}
+
+class Contraindicacion {
+  - String descripcion
+}
+
+class Vacaciones {
+  - Date fechaInicio
+  - Date fechaFin
+}
+
+Medico "1" -- "*" Paciente : atiende
+Medico "1" -- "*" Cita : gestiona
+Paciente "1" -- "*" Cita : asiste
+Cita "1" -- "1" Diagnostico : contiene
+Diagnostico "1" -- "*" Sintoma : presenta
+Receta "1" -- "1" Diagnostico : contiene
+Receta "1" -- "*" Medicamento : contiene
+(Receta, Medicamento) .. RecetaMedicamento
+Medicamento "1" -- "1" PrincipioActivo : tiene
+Medicamento "*" -- "*" Contraindicacion : tiene
+(Medicamento, Contraindicacion) .. MedicamentoContraindicacion
+Medico "1" -- "*" Vacaciones : tiene
+Empleado "1" -- "*" Vacaciones : tiene
+
+@enduml
